@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Library/Developer/CommandLineTools/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # Pomodoro 番茄工作法 https://en.wikipedia.org/wiki/Pomodoro_Technique
@@ -17,25 +17,43 @@ import subprocess
 
 WORK_MINUTES = 25
 BREAK_MINUTES = 5
-
+LANG = 'Ting-Ting'
+CN = True
 
 def main():
     try:
         if len(sys.argv) <= 1:
-            print(f'🍅 tomato {WORK_MINUTES} minutes. Ctrl+C to exit')
-            tomato(WORK_MINUTES, 'It is time to take a break')
-            print(f'🛀 break {BREAK_MINUTES} minutes. Ctrl+C to exit')
-            tomato(BREAK_MINUTES, 'It is time to work')
+            if not CN:
+                print(f'🍅 tomato {WORK_MINUTES} minutes. Ctrl+C to exit')
+                tomato(WORK_MINUTES, 'It is time to take a break')
+            else:
+                print(f'🍅 开始 {WORK_MINUTES} 分钟的番茄钟. Ctrl+C 取消')
+                tomato(WORK_MINUTES, '恭喜你完成了一个番茄钟')
+
+            if not CN:
+                print(f'🛀 break {BREAK_MINUTES} minutes. Ctrl+C to exit')
+                tomato(BREAK_MINUTES, 'It is time to work')
+            else:
+                print(f'🛀 休息 {BREAK_MINUTES} minutes. Ctrl+C 取消')
+                tomato(BREAK_MINUTES, '休息时间结束，继续专注吧')
 
         elif sys.argv[1] == '-t':
             minutes = int(sys.argv[2]) if len(sys.argv) > 2 else WORK_MINUTES
-            print(f'🍅 tomato {minutes} minutes. Ctrl+C to exit')
-            tomato(minutes, 'It is time to take a break')
+            if not CN:
+                print(f'🍅 tomato {minutes} minutes. Ctrl+C to exit')
+                tomato(minutes, 'It is time to take a break')
+            else:
+                print(f'🍅 开始 {minutes} 分钟的番茄钟. Ctrl+C 取消')
+                tomato(minutes, '恭喜你完成了一个番茄钟')
 
         elif sys.argv[1] == '-b':
             minutes = int(sys.argv[2]) if len(sys.argv) > 2 else BREAK_MINUTES
-            print(f'🛀 break {minutes} minutes. Ctrl+C to exit')
-            tomato(minutes, 'It is time to work')
+            if not CN:
+                print(f'🛀 break {minutes} minutes. Ctrl+C to exit')
+                tomato(minutes, 'It is time to work')
+            else:
+                print(f'🛀 休息 {minutes} 分钟. Ctrl+C 取消')
+                tomato(minutes, '休息时间结束，继续专注吧')
 
         elif sys.argv[1] == '-h':
             help()
@@ -95,7 +113,7 @@ def notify_me(msg):
         if sys.platform == 'darwin':
             # macos desktop notification
             subprocess.run(['terminal-notifier', '-title', '🍅', '-message', msg])
-            subprocess.run(['say', '-v', 'Daniel', msg])
+            subprocess.run(['say', '-v', LANG, msg])
         elif sys.platform.startswith('linux'):
             # ubuntu desktop notification
             subprocess.Popen(["notify-send", '🍅', msg])
