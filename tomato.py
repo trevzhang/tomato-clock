@@ -20,40 +20,20 @@ BREAK_MINUTES = 5
 LANG = 'Ting-Ting'
 CN = True
 
+
 def main():
     try:
         if len(sys.argv) <= 1:
-            if not CN:
-                print(f'🍅 tomato {WORK_MINUTES} minutes. Ctrl+C to exit')
-                tomato(WORK_MINUTES, 'It is time to take a break')
-            else:
-                print(f'🍅 开始 {WORK_MINUTES} 分钟的番茄钟. Ctrl+C 取消')
-                tomato(WORK_MINUTES, '恭喜你完成了一个番茄钟')
-
-            if not CN:
-                print(f'🛀 break {BREAK_MINUTES} minutes. Ctrl+C to exit')
-                tomato(BREAK_MINUTES, 'It is time to work')
-            else:
-                print(f'🛀 休息 {BREAK_MINUTES} minutes. Ctrl+C 取消')
-                tomato(BREAK_MINUTES, '休息时间结束，继续专注吧')
+            start_work(WORK_MINUTES)
+            start_break(BREAK_MINUTES)
 
         elif sys.argv[1] == '-t':
             minutes = int(sys.argv[2]) if len(sys.argv) > 2 else WORK_MINUTES
-            if not CN:
-                print(f'🍅 tomato {minutes} minutes. Ctrl+C to exit')
-                tomato(minutes, 'It is time to take a break')
-            else:
-                print(f'🍅 开始 {minutes} 分钟的番茄钟. Ctrl+C 取消')
-                tomato(minutes, '恭喜你完成了一个番茄钟')
+            start_work(minutes)
 
         elif sys.argv[1] == '-b':
             minutes = int(sys.argv[2]) if len(sys.argv) > 2 else BREAK_MINUTES
-            if not CN:
-                print(f'🛀 break {minutes} minutes. Ctrl+C to exit')
-                tomato(minutes, 'It is time to work')
-            else:
-                print(f'🛀 休息 {minutes} 分钟. Ctrl+C 取消')
-                tomato(minutes, '休息时间结束，继续专注吧')
+            start_break(minutes)
 
         elif sys.argv[1] == '-h':
             help()
@@ -68,6 +48,24 @@ def main():
         exit(1)
 
 
+def start_work(minutes):
+    if not CN:
+        print(f'🍅 tomato {minutes} minutes. Ctrl+C to exit')
+        tomato(minutes, 'It is time to take a break')
+    else:
+        print(f'🍅 开始 {minutes} 分钟的番茄钟. Ctrl+C 取消')
+        tomato(minutes, '恭喜你完成了一个番茄钟')
+
+
+def start_break(minutes):
+    if not CN:
+        print(f'🛀 break {minutes} minutes. Ctrl+C to exit')
+        tomato(minutes, 'It is time to work')
+    else:
+        print(f'🛀 休息 {minutes} 分钟. Ctrl+C 取消')
+        tomato(minutes, '休息时间结束，继续专注吧')
+
+
 def tomato(minutes, notify_msg):
     start_time = time.perf_counter()
     while True:
@@ -78,14 +76,14 @@ def tomato(minutes, notify_msg):
             break
 
         countdown = time.strftime("%M:%S ⏰", time.localtime(left_seconds))
-        duration = min(minutes, 25)
-        progressbar(diff_seconds, minutes * 60, duration, countdown)
+        # duration = min(minutes, 25)
+        progressbar(diff_seconds, minutes * 60, countdown)
         time.sleep(1)
 
     notify_me(notify_msg)
 
 
-def progressbar(curr, total, duration=10, extra=''):
+def progressbar(curr, total, extra='', duration=25):
     fraction = curr / total
     filled = round(fraction * duration)
     print('\r', '🍅' * filled + '--' * (duration - filled), '[{:.0%}]'.format(fraction), extra, end='')
