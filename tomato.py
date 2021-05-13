@@ -86,9 +86,9 @@ def tomato(minutes, notify_msg):
 
 
 def progressbar(curr, total, duration=10, extra=''):
-    frac = curr / total
-    filled = round(frac * duration)
-    print('\r', '🍅' * filled + '--' * (duration - filled), '[{:.0%}]'.format(frac), extra, end='')
+    fraction = curr / total
+    filled = round(fraction * duration)
+    print('\r', '🍅' * filled + '--' * (duration - filled), '[{:.0%}]'.format(fraction), extra, end='')
 
 
 def notify_me(msg):
